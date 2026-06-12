@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "a2a-hack"
+version = "0.1.0"
+description = "A2A hackathon harness on tau2-bench banking_knowledge"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "tau2[knowledge]",
+    "a2a-sdk>=0.3.4,<0.4",
+    "fastapi>=0.115.11",
+    "uvicorn>=0.34.0",
+    "httpx>=0.24.0",
+    "typer>=0.12.5",
+    "loguru>=0.7.3",
+    "pydantic>=2.0.0",
+]
+
+[project.scripts]
+a2a-hack = "a2a_hack.cli:app"
+
+[dependency-groups]
+dev = [
+    "a2a-sdk[http-server]>=0.3.4,<0.4",
+    "google-adk[a2a]>=1.10",
+    "pytest>=8.3.5",
+]
+
+[tool.uv.sources]
+# Local checkout for development; swap to the public git URL when publishing:
+# tau2 = { git = "https://github.com/sierra-research/tau2-bench" }
+tau2 = { path = "../tau2-bench", editable = true }
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/a2a_hack"]
