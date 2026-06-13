@@ -17,7 +17,9 @@ from loguru import logger
 from tau2.agent.base.participant import HalfDuplexParticipant
 from tau2.data_model.message import AssistantMessage, Message, UserMessage
 
-DEFAULT_TURN_TIMEOUT_S = 120.0
+# Per-turn budget (one personal turn runs a whole CS sub-loop: RAG + tools).
+# The whole-task budget is enforced separately by the orchestrator timeout.
+DEFAULT_TURN_TIMEOUT_S = 300.0
 
 # Orchestrator validate() rejects empty messages; coerce so one silent A2A
 # reply doesn't kill the sim.

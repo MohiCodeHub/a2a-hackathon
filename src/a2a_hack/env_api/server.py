@@ -27,7 +27,7 @@ AGENT_CARD_PATHS = [
     "/.well-known/agent-card.json",
     "/.well-known/agent.json",
 ]
-CS_FORWARD_TIMEOUT_S = 180.0
+CS_FORWARD_TIMEOUT_S = 300.0
 
 
 def _bearer_scope(request: Request, manager: SessionManager) -> Optional[Scope]:

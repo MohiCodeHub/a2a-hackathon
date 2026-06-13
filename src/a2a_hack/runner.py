@@ -42,6 +42,10 @@ DEFAULT_MAX_ERRORS = 10
 # express key. Raise --concurrency if your key has more quota.
 DEFAULT_CONCURRENCY = 2
 DEFAULT_OUTER_RETRIES = 2
+# Whole-task wall-clock; the orchestrator ends a slower sim as TIMEOUT (reward
+# 0), checked at turn boundaries (so a turn already running may overrun by up
+# to one per-turn budget). Paired with the bridge's per-turn timeout.
+DEFAULT_TASK_TIMEOUT_S = 600.0
 
 BRIDGE_IMPLEMENTATION = "a2a_bridge"
 
@@ -74,6 +78,7 @@ def run_one(
     seed: Optional[int] = None,
     max_steps: int = DEFAULT_MAX_STEPS,
     max_errors: int = DEFAULT_MAX_ERRORS,
+    task_timeout: float = DEFAULT_TASK_TIMEOUT_S,
 ) -> SimulationRun:
     """Run a single simulation: session -> orchestrator -> merge -> evaluate.
 
@@ -94,6 +99,7 @@ def run_one(
         task=task,
         max_steps=max_steps,
         max_errors=max_errors,
+        timeout=task_timeout,
         seed=seed,
         simulation_id=sid,
     )
@@ -159,6 +165,7 @@ def run_batch(
     seed: int = 42,
     max_steps: int = DEFAULT_MAX_STEPS,
     max_errors: int = DEFAULT_MAX_ERRORS,
+    task_timeout: float = DEFAULT_TASK_TIMEOUT_S,
     max_retries: int = DEFAULT_OUTER_RETRIES,
     auto_resume: bool = False,
     api_host: str = "0.0.0.0",
@@ -211,6 +218,7 @@ def run_batch(
                         seed=trial_seed,
                         max_steps=max_steps,
                         max_errors=max_errors,
+                        task_timeout=task_timeout,
                     ),
                     task=task,
                     trial=0,
